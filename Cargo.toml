@@ -3,6 +3,8 @@ name = "awis-rs"
 version = "0.1.0"
 authors = ["zeapo <mohamed@zenadi.com>"]
 edition = "2018"
+description = "Alexa Web Information Service"
+license = "MIT"
 
 [dependencies]
 reqwest = "0.9.15"
