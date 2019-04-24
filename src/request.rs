@@ -1,12 +1,10 @@
 use std::error;
-use std::string::FromUtf8Error;
 
 use chrono::Utc;
 use hmac::{Hmac, Mac};
-use hmac::digest::generic_array::{ArrayLength, GenericArray};
 use reqwest::{Method, Request, Url};
-use reqwest::header::{HeaderMap, HeaderValue};
-use sha2::{Digest, Sha256, Sha512};
+use reqwest::header::HeaderValue;
+use sha2::{Digest, Sha256};
 
 type Hmac256 = Hmac<Sha256>;
 
@@ -46,15 +44,13 @@ pub fn new(access_key_id: &str, secret_access_key: &str, canonical_query: &str) 
     sg.input(string_to_sign.as_bytes());
     let signature = format!("{:x}", sg.result().code());
 
-    let canonical_headers = format!("host:{}\nx-amz-date:{}", HOST, amz_date);
-
     let auth_header_value = format!("{} Credential={}/{}, SignedHeaders={}, Signature={}",
                                     ALGORITHM, access_key_id, credential_scope, SIGNED_HEADERS, signature);
 
 
     let url = Url::parse(&format!("{}?{}", ENDPOINT, canonical_query))?;
     let mut req = Request::new(Method::GET, url);
-    let mut headers = req.headers_mut();
+    let headers = req.headers_mut();
 
 
     headers.insert("x-amz-date", HeaderValue::from_str(&amz_date)?);
@@ -91,7 +87,5 @@ fn signature_key(key: &str, date: &str, region: &str, service_name: &str) -> Vec
     sg.input("aws4_request".as_bytes());
     let key = &sg.result().code();
 
-    let l = key.len();
-    let mut signature: Vec<u8> = Vec::from(&key[..]);
-    signature
+    Vec::from(&key[..])
 }
