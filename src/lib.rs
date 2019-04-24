@@ -1,6 +1,8 @@
 extern crate reqwest;
 extern crate sha2;
 extern crate hmac;
+extern crate serde;
+extern crate serde_xml_rs;
 
 mod request;
 pub mod groups;
