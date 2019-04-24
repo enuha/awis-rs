@@ -3,7 +3,7 @@ extern crate sha2;
 extern crate hmac;
 
 mod request;
-mod groups;
+pub mod groups;
 
 use std::error;
 
