@@ -1,6 +1,6 @@
-use serde::Deserializer;
+use serde::{Deserialize, Deserializer};
 
-fn u64_deserializer<'de, D>(d: D) -> Result<Option<u64>, D::Error>
+pub fn u64_deserializer<'de, D>(d: D) -> Result<Option<u64>, D::Error>
     where D: Deserializer<'de>
 {
     let s = String::deserialize(d)?;
@@ -10,7 +10,7 @@ fn u64_deserializer<'de, D>(d: D) -> Result<Option<u64>, D::Error>
     }
 }
 
-fn string_deserializer<'de, D>(d: D) -> Result<Option<String>, D::Error>
+pub fn string_deserializer<'de, D>(d: D) -> Result<Option<String>, D::Error>
     where D: Deserializer<'de>
 {
     let s = String::deserialize(d)?;

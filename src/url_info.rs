@@ -1,16 +1,55 @@
-use serde::{Serialize, Deserialize, Deserializer};
-use serde_xml_rs::from_str;
+use serde::{Serialize, Deserialize};
 
+use crate::serde_utils::*;
+
+pub mod groups {
+    pub const RELATED_LINKS: &str = "RelatedLinks";
+    pub const CATEGORIES: &str = "Categories";
+    pub const RANK: &str = "Rank";
+    pub const CONTACT_INFO: &str = "ContactInfo";
+    pub const RANK_BY_COUNTRY: &str = "RankByCountry";
+    pub const USAGE_STATS: &str = "UsageStats";
+    pub const SPEED: &str = "Speed";
+    pub const LANGUAGE: &str = "Language";
+    pub const OWNED_DOMAINS: &str = "OwnedDomains";
+    pub const LINKED_IN_COUNT: &str = "LinksInCount";
+    pub const SITE_DATA: &str = "SiteData";
+    pub const ADULT_CONTENT: &str = "AdultContent";
+
+    pub const TRAFFIC_DATA: &str = "TrafficData";
+    pub const CONTENT_DATA: &str = "ContentData";
+}
+
+pub const ACTION: &str = "UrlInfo";
+
+pub const VALID_GROUPS: [&str; 14] = [groups::RELATED_LINKS, groups::CATEGORIES, groups::RANK,
+    groups::CONTACT_INFO, groups::RANK_BY_COUNTRY, groups::USAGE_STATS, groups::SPEED,
+    groups::LANGUAGE, groups::OWNED_DOMAINS, groups::LINKED_IN_COUNT, groups::SITE_DATA,
+    groups::ADULT_CONTENT, groups::TRAFFIC_DATA, groups::CONTENT_DATA];
 
 #[derive(Debug, Serialize, Deserialize)]
-struct OperationRequest {
+#[serde(rename_all = "PascalCase")]
+pub struct UrlInfoResponse {
+    response: NestedUrlInfoResponse
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct NestedUrlInfoResponse {
+    operation_request: OperationRequest,
+    url_info_result: UrlInfoResult,
+    response_status: ResponseStatus,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct OperationRequest {
     #[serde(rename = "RequestId")]
     request_id: String
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct SiteData {
+pub struct SiteData {
     #[serde(deserialize_with = "string_deserializer", default)]
     title: Option<String>,
     #[serde(deserialize_with = "string_deserializer", default)]
@@ -21,7 +60,7 @@ struct SiteData {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct Speed {
+pub struct Speed {
     #[serde(deserialize_with = "u64_deserializer", default)]
     median_load_time: Option<u64>,
     #[serde(deserialize_with = "u64_deserializer", default)]
@@ -30,7 +69,7 @@ struct Speed {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct OwnedDomain {
+pub struct OwnedDomain {
     #[serde(deserialize_with = "string_deserializer", default)]
     domain: Option<String>,
     #[serde(deserialize_with = "string_deserializer", default)]
@@ -39,14 +78,14 @@ struct OwnedDomain {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct Language {
+pub struct Language {
     #[serde(deserialize_with = "string_deserializer", default)]
     locale: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct ContentData {
+pub struct ContentData {
     #[serde(deserialize_with = "string_deserializer", default)]
     data_url: Option<String>,
     #[serde(deserialize_with = "string_deserializer", default)]
@@ -63,52 +102,48 @@ struct ContentData {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct Alexa {
+pub struct Alexa {
     content_data: Option<ContentData>,
     traffic_data: Option<TrafficData>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct UrlInfoResult {
+pub struct UrlInfoResult {
     alexa: Alexa
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct ResponseStatus {
+pub struct ResponseStatus {
     status_code: String
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
-struct NestedUrlInfoResponse {
-    operation_request: OperationRequest,
-    url_info_result: UrlInfoResult,
-    response_status: ResponseStatus,
-}
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct UrlInfoResponse {
-    response: NestedUrlInfoResponse
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
-struct TrafficData {
+pub struct TrafficData {
     #[serde(deserialize_with = "string_deserializer", default)]
     data_url: Option<String>,
     #[serde(deserialize_with = "string_deserializer", default)]
     asin: Option<String>,
     #[serde(deserialize_with = "u64_deserializer", default)]
     rank: Option<u64>,
-    usage_statistics: Option<Vec<UsageStatistic>>
+    usage_statistics: Option<Vec<UsageStatistic>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct TimeRange {
+pub struct UsageStatistic {
+    time_range: Option<TimeRange>,
+    rank: Option<DeltaValue>,
+    reach: Option<Reach>,
+    page_views: Option<PageViews>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct TimeRange {
     #[serde(deserialize_with = "u64_deserializer", default)]
     days: Option<u64>,
     #[serde(deserialize_with = "u64_deserializer", default)]
@@ -117,16 +152,24 @@ struct TimeRange {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct Rank {
+pub struct DeltaValue {
     #[serde(deserialize_with = "u64_deserializer", default)]
     value: Option<u64>,
-    #[serde(deserialize_with = "u64_deserializer", default)]
-    delta: Option<u64>,
+    #[serde(deserialize_with = "string_deserializer", default)]
+    delta: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-struct UsageStatistic {
-    time_range: Option<TimeRange>,
-    rank: Option<Rank>,
+pub struct Reach {
+    rank: Option<DeltaValue>,
+    per_million: Option<DeltaValue>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct PageViews {
+    rank: Option<DeltaValue>,
+    per_million: Option<DeltaValue>,
+    per_user: Option<DeltaValue>,
 }
