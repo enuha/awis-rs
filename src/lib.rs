@@ -1,9 +1,13 @@
 extern crate reqwest;
 extern crate sha2;
 extern crate hmac;
+extern crate serde;
+extern crate serde_xml_rs;
 
 mod request;
+mod serde_utils;
 pub mod groups;
+pub mod url_info;
 
 use std::error;
 
@@ -24,10 +28,11 @@ impl AwisClient {
 
     // Create a UrlInfo request for a url
     pub fn url_info(&self, response_group: &str, url: &str) -> Result<reqwest::Request, Box<error::Error>> {
-        if !groups::url_info::VALID_GROUPS.contains(&response_group) {
+        if !url_info::VALID_GROUPS.contains(&response_group) {
             return err!("invalid response group {}", response_group);
         }
-        let query = format!("Action={}&ResponseGroup={}&Url={}", groups::url_info::ACTION, response_group, url);
+        let query = format!("Action={}&ResponseGroup={}&Url={}",
+                            url_info::ACTION, response_group, url);
         request::new(&self.access_key, &self.secret_access_key, &query)
     }
 
