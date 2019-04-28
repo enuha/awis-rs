@@ -129,7 +129,20 @@ pub struct TrafficData {
     asin: Option<String>,
     #[serde(deserialize_with = "u64_deserializer", default)]
     rank: Option<u64>,
-    usage_statistics: Option<Vec<UsageStatistic>>,
+    usage_statistics: Option<UsageStatistics>,
+    contributing_subdomains: Option<ContributingSubdomains>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct UsageStatistics {
+    usage_statistic: Option<Vec<UsageStatistic>>
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct ContributingSubdomains {
+    contributing_subdomain: Option<Vec<ContributingSubdomain>>
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -139,6 +152,16 @@ pub struct UsageStatistic {
     rank: Option<DeltaValue>,
     reach: Option<Reach>,
     page_views: Option<PageViews>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct ContributingSubdomain {
+    #[serde(deserialize_with = "string_deserializer", default)]
+    data_url: Option<String>,
+    time_range: Option<TimeRange>,
+    reach: Option<DomainReach>,
+    page_views: Option<DomainPageViews>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -153,8 +176,8 @@ pub struct TimeRange {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct DeltaValue {
-    #[serde(deserialize_with = "u64_deserializer", default)]
-    value: Option<u64>,
+    #[serde(deserialize_with = "f64_deserializer", default)]
+    value: Option<f64>,
     #[serde(deserialize_with = "string_deserializer", default)]
     delta: Option<String>,
 }
@@ -173,3 +196,22 @@ pub struct PageViews {
     per_million: Option<DeltaValue>,
     per_user: Option<DeltaValue>,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct DomainReach {
+    #[serde(deserialize_with = "string_deserializer", default)]
+    percentage: Option<String>,
+    per_million: Option<DeltaValue>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct DomainPageViews {
+    #[serde(deserialize_with = "string_deserializer", default)]
+    percentage: Option<String>,
+    #[serde(deserialize_with = "string_deserializer", default)]
+    per_user: Option<String>,
+}
+
+
