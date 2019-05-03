@@ -142,6 +142,7 @@ pub struct TrafficData {
     rank: Option<u64>,
     usage_statistics: Option<UsageStatistics>,
     contributing_subdomains: Option<ContributingSubdomains>,
+    rank_by_country: Option<RankByCountry>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -223,4 +224,29 @@ pub struct DomainPageViews {
     percentage: Option<String>,
     #[serde(deserialize_with = "string_deserializer", default)]
     per_user: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct RankByCountry {
+    country: Option<Vec<Country>>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct Country {
+    #[serde(deserialize_with = "string_deserializer", default)]
+    code: Option<String>,
+    #[serde(deserialize_with = "u64_deserializer", default)]
+    rank: Option<u64>,
+    contribution: Option<CountryContribution>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct CountryContribution {
+    #[serde(deserialize_with = "string_deserializer", default)]
+    page_views: Option<String>,
+    #[serde(deserialize_with = "string_deserializer", default)]
+    users: Option<String>,
 }
