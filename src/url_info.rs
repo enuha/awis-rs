@@ -190,8 +190,8 @@ pub struct TimeRange {
 pub struct DeltaValue {
     #[serde(deserialize_with = "f64_deserializer", default)]
     value: Option<f64>,
-    #[serde(deserialize_with = "string_deserializer", default)]
-    delta: Option<String>,
+    #[serde(deserialize_with = "f64_deserializer", default)]
+    delta: Option<f64>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -212,18 +212,18 @@ pub struct PageViews {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct DomainReach {
-    #[serde(deserialize_with = "string_deserializer", default)]
-    percentage: Option<String>,
+    #[serde(deserialize_with = "f64_deserializer", default)]
+    percentage: Option<f64>,
     per_million: Option<DeltaValue>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct DomainPageViews {
-    #[serde(deserialize_with = "string_deserializer", default)]
-    percentage: Option<String>,
-    #[serde(deserialize_with = "string_deserializer", default)]
-    per_user: Option<String>,
+    #[serde(deserialize_with = "f64_deserializer", default)]
+    percentage: Option<f64>,
+    #[serde(deserialize_with = "f64_deserializer", default)]
+    per_user: Option<f64>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -245,8 +245,8 @@ pub struct Country {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct CountryContribution {
-    #[serde(deserialize_with = "string_deserializer", default)]
-    page_views: Option<String>,
-    #[serde(deserialize_with = "string_deserializer", default)]
-    users: Option<String>,
+    #[serde(deserialize_with = "f64_deserializer", default)]
+    page_views: Option<f64>,
+    #[serde(deserialize_with = "f64_deserializer", default)]
+    users: Option<f64>,
 }
