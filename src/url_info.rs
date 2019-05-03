@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 use crate::serde_utils::*;
 
@@ -22,15 +22,27 @@ pub mod groups {
 
 pub const ACTION: &str = "UrlInfo";
 
-pub const VALID_GROUPS: [&str; 14] = [groups::RELATED_LINKS, groups::CATEGORIES, groups::RANK,
-    groups::CONTACT_INFO, groups::RANK_BY_COUNTRY, groups::USAGE_STATS, groups::SPEED,
-    groups::LANGUAGE, groups::OWNED_DOMAINS, groups::LINKED_IN_COUNT, groups::SITE_DATA,
-    groups::ADULT_CONTENT, groups::TRAFFIC_DATA, groups::CONTENT_DATA];
+pub const VALID_GROUPS: [&str; 14] = [
+    groups::RELATED_LINKS,
+    groups::CATEGORIES,
+    groups::RANK,
+    groups::CONTACT_INFO,
+    groups::RANK_BY_COUNTRY,
+    groups::USAGE_STATS,
+    groups::SPEED,
+    groups::LANGUAGE,
+    groups::OWNED_DOMAINS,
+    groups::LINKED_IN_COUNT,
+    groups::SITE_DATA,
+    groups::ADULT_CONTENT,
+    groups::TRAFFIC_DATA,
+    groups::CONTENT_DATA,
+];
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct UrlInfoResponse {
-    response: NestedUrlInfoResponse
+    response: NestedUrlInfoResponse,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -44,7 +56,7 @@ pub struct NestedUrlInfoResponse {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct OperationRequest {
     #[serde(rename = "RequestId")]
-    request_id: String
+    request_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -110,15 +122,14 @@ pub struct Alexa {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct UrlInfoResult {
-    alexa: Alexa
+    alexa: Alexa,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct ResponseStatus {
-    status_code: String
+    status_code: String,
 }
-
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
@@ -136,13 +147,13 @@ pub struct TrafficData {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct UsageStatistics {
-    usage_statistic: Option<Vec<UsageStatistic>>
+    usage_statistic: Option<Vec<UsageStatistic>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct ContributingSubdomains {
-    contributing_subdomain: Option<Vec<ContributingSubdomain>>
+    contributing_subdomain: Option<Vec<ContributingSubdomain>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -213,5 +224,3 @@ pub struct DomainPageViews {
     #[serde(deserialize_with = "string_deserializer", default)]
     per_user: Option<String>,
 }
-
-

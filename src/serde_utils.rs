@@ -1,7 +1,8 @@
 use serde::{Deserialize, Deserializer};
 
 pub fn u64_deserializer<'de, D>(d: D) -> Result<Option<u64>, D::Error>
-    where D: Deserializer<'de>
+where
+    D: Deserializer<'de>,
 {
     let s = String::deserialize(d)?;
     match &s[..] {
@@ -11,7 +12,8 @@ pub fn u64_deserializer<'de, D>(d: D) -> Result<Option<u64>, D::Error>
 }
 
 pub fn f64_deserializer<'de, D>(d: D) -> Result<Option<f64>, D::Error>
-    where D: Deserializer<'de>
+where
+    D: Deserializer<'de>,
 {
     let s = String::deserialize(d)?;
     match &s[..] {
@@ -22,7 +24,8 @@ pub fn f64_deserializer<'de, D>(d: D) -> Result<Option<f64>, D::Error>
 }
 
 pub fn string_deserializer<'de, D>(d: D) -> Result<Option<String>, D::Error>
-    where D: Deserializer<'de>
+where
+    D: Deserializer<'de>,
 {
     let s = String::deserialize(d)?;
     match &s[..] {

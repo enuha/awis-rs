@@ -1,12 +1,12 @@
-extern crate reqwest;
-extern crate sha2;
 extern crate hmac;
+extern crate reqwest;
 extern crate serde;
 extern crate serde_xml_rs;
+extern crate sha2;
 
+pub mod groups;
 mod request;
 mod serde_utils;
-pub mod groups;
 pub mod url_info;
 
 use std::error;
@@ -15,7 +15,6 @@ pub struct AwisClient {
     access_key: String,
     secret_access_key: String,
 }
-
 
 impl AwisClient {
     // create a new client
@@ -27,71 +26,155 @@ impl AwisClient {
     }
 
     // Create a UrlInfo request for a url
-    pub fn url_info(&self, response_group: &str, url: &str) -> Result<reqwest::Request, Box<error::Error>> {
+    pub fn url_info(
+        &self,
+        response_group: &str,
+        url: &str,
+    ) -> Result<reqwest::Request, Box<error::Error>> {
         AwisClient::validate_groups(&url_info::VALID_GROUPS, response_group)?;
 
-        let query = format!("Action={}&ResponseGroup={}&Url={}",
-                            url_info::ACTION, response_group, url);
-        request::new(&self.access_key, &self.secret_access_key, &query)
+        request::new(
+            &self.access_key,
+            &self.secret_access_key,
+            &[
+                ("Action", url_info::ACTION),
+                ("ResponseGroup", response_group),
+                ("Url", url),
+            ],
+        )
     }
 
     // Create a traffic history  request for a url
-    pub fn traffic_history(&self, range: Option<i8>, start: Option<&str>, url: &str) -> Result<reqwest::Request, Box<error::Error>> {
-        let query = match start {
-            Some(st) => format!("Action={}&Range={}&ResponseGroup={}&Start={}&Url={}",
-                                groups::traffic_history::ACTION, range.unwrap_or(31), groups::traffic_history::HISTORY, st, url),
-            None => format!("Action={}&Range={}&ResponseGroup={}&Url={}",
-                            groups::traffic_history::ACTION, range.unwrap_or(31), groups::traffic_history::HISTORY, url),
-        };
-        request::new(&self.access_key, &self.secret_access_key, &query)
+    pub fn traffic_history(
+        &self,
+        range: Option<i8>,
+        start: Option<&str>,
+        url: &str,
+    ) -> Result<reqwest::Request, Box<error::Error>> {
+        let mut params: Vec<(&str, &str)> = Vec::new();
+        params.push(("Action", groups::traffic_history::ACTION));
+
+        let mut long_living = String::new();
+        if let Some(rg) = range {
+            long_living.push_str(&rg.to_string());
+            params.push(("Range", &long_living));
+        }
+
+        params.push(("ResponseGroup", groups::traffic_history::HISTORY));
+        if let Some(st) = start {
+            params.push(("Start", st));
+        }
+        params.push(("Url", url));
+        request::new(&self.access_key, &self.secret_access_key, &params)
     }
 
-    pub fn category_browse(&self, descriptions: Option<bool>, path: &str, response_group: &str) -> Result<reqwest::Request, Box<error::Error>> {
+    pub fn category_browse(
+        &self,
+        descriptions: Option<bool>,
+        path: &str,
+        response_group: &str,
+    ) -> Result<reqwest::Request, Box<error::Error>> {
         AwisClient::validate_groups(&groups::category_browse::VALID_GROUPS, response_group)?;
 
-        let query = match descriptions {
-            Some(st) => format!("Action={}&Descriptions={}&Path={}&ResponseGroup={}",
-                                groups::category_browse::ACTION, st, path, response_group),
-            None => format!("Action={}&Path={}&ResponseGroup={}", groups::category_browse::ACTION, path, response_group),
-        };
+        let mut params: Vec<(&str, &str)> = Vec::new();
+        params.push(("Action", groups::category_browse::ACTION));
 
-        request::new(&self.access_key, &self.secret_access_key, &query)
+        let mut long_living = String::new();
+        if let Some(ds) = descriptions {
+            long_living.push_str(&ds.to_string());
+            params.push(("Descriptions", &long_living));
+        }
+
+        params.push(("Path", path));
+        params.push(("ResponseGroup", response_group));
+
+        request::new(&self.access_key, &self.secret_access_key, &params)
     }
 
-    pub fn category_listings(&self, count: Option<i8>, descriptions: Option<bool>, path: &str,
-                             recursive: Option<bool>, sort_by: Option<&str>, start: Option<i32>) -> Result<reqwest::Request, Box<error::Error>> {
-        let mut query: Vec<String> = Vec::with_capacity(8);
+    pub fn category_listings(
+        &self,
+        count: Option<i8>,
+        descriptions: Option<bool>,
+        path: &str,
+        recursive: Option<bool>,
+        sort_by: Option<&str>,
+        start: Option<i32>,
+    ) -> Result<reqwest::Request, Box<error::Error>> {
+        let mut params: Vec<(&str, &str)> = Vec::with_capacity(8);
 
-        query.push(format!("Action={}", groups::category_listing::ACTION));
-        if let Some(c) = count { query.push(format!("Count={}", c)); }
-        if let Some(d) = descriptions { query.push(format!("Descriptions={}", d)); }
-        query.push(format!("Path={}", path));
-        if let Some(r) = recursive { query.push(format!("Recursive={}", r)); }
-        query.push(format!("ResponseGroup={}", groups::category_listing::LISTINGS));
-        if let Some(s) = sort_by { query.push(format!("SortBy={}", s)); }
-        if let Some(s) = start { query.push(format!("Start={}", s)); }
+        params.push(("Action", groups::category_listing::ACTION));
+        let mut long_living = String::new();
+        if let Some(c) = count {
+            long_living.push_str(&c.to_string());
+            params.push(("Count", &long_living));
+        }
 
-        request::new(&self.access_key, &self.secret_access_key, &query.join("&"))
+        let mut long_living = String::new();
+        if let Some(d) = descriptions {
+            long_living.push_str(&d.to_string());
+            params.push(("Descriptions", &long_living));
+        }
+
+        params.push(("Path", path));
+
+        let mut long_living = String::new();
+        if let Some(r) = recursive {
+            long_living.push_str(&r.to_string());
+            params.push(("Recursive", &long_living));
+        }
+
+        params.push(("ResponseGroup", groups::category_listing::LISTINGS));
+
+        if let Some(s) = sort_by {
+            params.push(("SortBy", s));
+        }
+
+        let mut long_living = String::new();
+        if let Some(s) = start {
+            long_living.push_str(&s.to_string());
+            params.push(("Start", &long_living));
+        }
+
+        request::new(&self.access_key, &self.secret_access_key, &params)
     }
 
-    pub fn sites_linking_in(&self, count: Option<i8>, start: Option<i32>, url: &str) -> Result<reqwest::Request, Box<error::Error>> {
-        let mut query: Vec<String> = Vec::with_capacity(6);
+    pub fn sites_linking_in(
+        &self,
+        count: Option<i8>,
+        start: Option<i32>,
+        url: &str,
+    ) -> Result<reqwest::Request, Box<error::Error>> {
+        let mut params: Vec<(&str, &str)> = Vec::with_capacity(6);
 
-        query.push(format!("Action={}", groups::sites_linking_in::ACTION));
-        if let Some(c) = count { query.push(format!("Count={}", c)); }
-        query.push(format!("ResponseGroup={}", groups::sites_linking_in::SITES_LINKING_IN));
-        if let Some(s) = start { query.push(format!("Start={}", s)); }
-        query.push(format!("Url={}", url));
+        params.push(("Action", groups::sites_linking_in::ACTION));
 
-        request::new(&self.access_key, &self.secret_access_key, &query.join("&"))
+        let mut long_living = String::new();
+        if let Some(c) = count {
+            long_living.push_str(&c.to_string());
+            params.push(("Count", &long_living));
+        }
+
+        params.push(("ResponseGroup", groups::sites_linking_in::SITES_LINKING_IN));
+
+        let mut long_living = String::new();
+        if let Some(s) = start {
+            long_living.push_str(&s.to_string());
+            params.push(("Start", &long_living));
+        }
+        params.push(("Url", url));
+
+        request::new(&self.access_key, &self.secret_access_key, &params)
     }
 
-    fn validate_groups(valid_groups: &[&str], response_group: &str) -> Result<(), Box<error::Error>> {
+    fn validate_groups(
+        valid_groups: &[&str],
+        response_group: &str,
+    ) -> Result<(), Box<error::Error>> {
         for group in response_group.split(",") {
             if !valid_groups.contains(&group) {
                 return err!("invalid response group {}", group);
             }
-        };
+        }
         Ok(())
     }
 }
