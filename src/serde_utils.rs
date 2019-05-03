@@ -5,9 +5,10 @@ where
     D: Deserializer<'de>,
 {
     let s = String::deserialize(d)?;
+    let s: String = s.chars().filter(|c| !vec![',', '%'].contains(c)).collect();
     match &s[..] {
         "" => Ok(None),
-        _ => Ok(Some(s.replace(",", "").parse::<u64>().unwrap())),
+        _ => Ok(Some(s.parse::<u64>().unwrap())),
     }
 }
 
@@ -16,10 +17,10 @@ where
     D: Deserializer<'de>,
 {
     let s = String::deserialize(d)?;
+    let s: String = s.chars().filter(|c| !vec![',', '%'].contains(c)).collect();
     match &s[..] {
         "" => Ok(None),
-        // TODO use a regular expression to replace % too, and use f64 rather than strings in percentages
-        _ => Ok(Some(s.replace(",", "").parse::<f64>().unwrap())),
+        _ => Ok(Some(s.parse::<f64>().unwrap())),
     }
 }
 
