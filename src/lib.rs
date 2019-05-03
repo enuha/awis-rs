@@ -28,9 +28,8 @@ impl AwisClient {
 
     // Create a UrlInfo request for a url
     pub fn url_info(&self, response_group: &str, url: &str) -> Result<reqwest::Request, Box<error::Error>> {
-        if !url_info::VALID_GROUPS.contains(&response_group) {
-            return err!("invalid response group {}", response_group);
-        }
+        AwisClient::validate_groups(&url_info::VALID_GROUPS, response_group)?;
+
         let query = format!("Action={}&ResponseGroup={}&Url={}",
                             url_info::ACTION, response_group, url);
         request::new(&self.access_key, &self.secret_access_key, &query)
@@ -48,9 +47,7 @@ impl AwisClient {
     }
 
     pub fn category_browse(&self, descriptions: Option<bool>, path: &str, response_group: &str) -> Result<reqwest::Request, Box<error::Error>> {
-        if !groups::category_browse::VALID_GROUPS.contains(&response_group) {
-            return err!("invalid response group {}", response_group);
-        }
+        AwisClient::validate_groups(&groups::category_browse::VALID_GROUPS, response_group)?;
 
         let query = match descriptions {
             Some(st) => format!("Action={}&Descriptions={}&Path={}&ResponseGroup={}",
@@ -87,5 +84,14 @@ impl AwisClient {
         query.push(format!("Url={}", url));
 
         request::new(&self.access_key, &self.secret_access_key, &query.join("&"))
+    }
+
+    fn validate_groups(valid_groups: &[&str], response_group: &str) -> Result<(), Box<error::Error>> {
+        for group in response_group.split(",") {
+            if !valid_groups.contains(&group) {
+                return err!("invalid response group {}", group);
+            }
+        };
+        Ok(())
     }
 }
