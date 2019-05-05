@@ -42,211 +42,211 @@ pub const VALID_GROUPS: [&str; 14] = [
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct UrlInfoResponse {
-    response: NestedUrlInfoResponse,
+    pub response: NestedUrlInfoResponse,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct NestedUrlInfoResponse {
-    operation_request: OperationRequest,
-    url_info_result: UrlInfoResult,
-    response_status: ResponseStatus,
+    pub operation_request: OperationRequest,
+    pub url_info_result: UrlInfoResult,
+    pub response_status: ResponseStatus,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct OperationRequest {
     #[serde(rename = "RequestId")]
-    request_id: String,
+    pub request_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct SiteData {
     #[serde(deserialize_with = "string_deserializer", default)]
-    title: Option<String>,
+    pub title: Option<String>,
     #[serde(deserialize_with = "string_deserializer", default)]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(deserialize_with = "string_deserializer", default)]
-    online_since: Option<String>,
+    pub online_since: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct Speed {
     #[serde(deserialize_with = "u64_deserializer", default)]
-    median_load_time: Option<u64>,
+    pub median_load_time: Option<u64>,
     #[serde(deserialize_with = "u64_deserializer", default)]
-    percentile: Option<u64>,
+    pub percentile: Option<u64>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct OwnedDomain {
     #[serde(deserialize_with = "string_deserializer", default)]
-    domain: Option<String>,
+    pub domain: Option<String>,
     #[serde(deserialize_with = "string_deserializer", default)]
-    title: Option<String>,
+    pub title: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct Language {
     #[serde(deserialize_with = "string_deserializer", default)]
-    locale: Option<String>,
+    pub locale: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct ContentData {
     #[serde(deserialize_with = "string_deserializer", default)]
-    data_url: Option<String>,
+    pub data_url: Option<String>,
     #[serde(deserialize_with = "string_deserializer", default)]
-    asin: Option<String>,
-    site_data: Option<SiteData>,
-    speed: Option<Speed>,
+    pub asin: Option<String>,
+    pub site_data: Option<SiteData>,
+    pub speed: Option<Speed>,
     #[serde(deserialize_with = "string_deserializer", default)]
-    adult_content: Option<String>,
-    language: Option<Language>,
+    pub adult_content: Option<String>,
+    pub language: Option<Language>,
     #[serde(deserialize_with = "u64_deserializer", default)]
-    links_in_count: Option<u64>,
-    owned_domains: Option<Vec<OwnedDomain>>,
+    pub links_in_count: Option<u64>,
+    pub owned_domains: Option<Vec<OwnedDomain>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct Alexa {
-    content_data: Option<ContentData>,
-    traffic_data: Option<TrafficData>,
+    pub content_data: Option<ContentData>,
+    pub traffic_data: Option<TrafficData>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct UrlInfoResult {
-    alexa: Alexa,
+    pub alexa: Alexa,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct ResponseStatus {
-    status_code: String,
+    pub status_code: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct TrafficData {
     #[serde(deserialize_with = "string_deserializer", default)]
-    data_url: Option<String>,
+    pub data_url: Option<String>,
     #[serde(deserialize_with = "string_deserializer", default)]
-    asin: Option<String>,
+    pub asin: Option<String>,
     #[serde(deserialize_with = "u64_deserializer", default)]
-    rank: Option<u64>,
-    usage_statistics: Option<UsageStatistics>,
-    contributing_subdomains: Option<ContributingSubdomains>,
-    rank_by_country: Option<RankByCountry>,
+    pub rank: Option<u64>,
+    pub usage_statistics: Option<UsageStatistics>,
+    pub contributing_subdomains: Option<ContributingSubdomains>,
+    pub rank_by_country: Option<RankByCountry>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct UsageStatistics {
-    usage_statistic: Option<Vec<UsageStatistic>>,
+    pub usage_statistic: Option<Vec<UsageStatistic>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct ContributingSubdomains {
-    contributing_subdomain: Option<Vec<ContributingSubdomain>>,
+    pub contributing_subdomain: Option<Vec<ContributingSubdomain>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct UsageStatistic {
-    time_range: Option<TimeRange>,
-    rank: Option<DeltaValue>,
-    reach: Option<Reach>,
-    page_views: Option<PageViews>,
+    pub time_range: Option<TimeRange>,
+    pub rank: Option<DeltaValue>,
+    pub reach: Option<Reach>,
+    pub page_views: Option<PageViews>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct ContributingSubdomain {
     #[serde(deserialize_with = "string_deserializer", default)]
-    data_url: Option<String>,
-    time_range: Option<TimeRange>,
-    reach: Option<DomainReach>,
-    page_views: Option<DomainPageViews>,
+    pub data_url: Option<String>,
+    pub time_range: Option<TimeRange>,
+    pub reach: Option<DomainReach>,
+    pub page_views: Option<DomainPageViews>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct TimeRange {
     #[serde(deserialize_with = "u64_deserializer", default)]
-    days: Option<u64>,
+    pub days: Option<u64>,
     #[serde(deserialize_with = "u64_deserializer", default)]
-    months: Option<u64>,
+    pub months: Option<u64>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct DeltaValue {
     #[serde(deserialize_with = "f64_deserializer", default)]
-    value: Option<f64>,
+    pub value: Option<f64>,
     #[serde(deserialize_with = "f64_deserializer", default)]
-    delta: Option<f64>,
+    pub delta: Option<f64>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct Reach {
-    rank: Option<DeltaValue>,
-    per_million: Option<DeltaValue>,
+    pub rank: Option<DeltaValue>,
+    pub per_million: Option<DeltaValue>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct PageViews {
-    rank: Option<DeltaValue>,
-    per_million: Option<DeltaValue>,
-    per_user: Option<DeltaValue>,
+    pub rank: Option<DeltaValue>,
+    pub per_million: Option<DeltaValue>,
+    pub per_user: Option<DeltaValue>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct DomainReach {
     #[serde(deserialize_with = "f64_deserializer", default)]
-    percentage: Option<f64>,
-    per_million: Option<DeltaValue>,
+    pub percentage: Option<f64>,
+    pub per_million: Option<DeltaValue>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct DomainPageViews {
     #[serde(deserialize_with = "f64_deserializer", default)]
-    percentage: Option<f64>,
+    pub percentage: Option<f64>,
     #[serde(deserialize_with = "f64_deserializer", default)]
-    per_user: Option<f64>,
+    pub per_user: Option<f64>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct RankByCountry {
-    country: Option<Vec<Country>>,
+    pub country: Option<Vec<Country>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct Country {
     #[serde(deserialize_with = "string_deserializer", default)]
-    code: Option<String>,
+    pub code: Option<String>,
     #[serde(deserialize_with = "u64_deserializer", default)]
-    rank: Option<u64>,
-    contribution: Option<CountryContribution>,
+    pub rank: Option<u64>,
+    pub contribution: Option<CountryContribution>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct CountryContribution {
     #[serde(deserialize_with = "f64_deserializer", default)]
-    page_views: Option<f64>,
+    pub page_views: Option<f64>,
     #[serde(deserialize_with = "f64_deserializer", default)]
-    users: Option<f64>,
+    pub users: Option<f64>,
 }
