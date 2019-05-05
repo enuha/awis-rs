@@ -40,13 +40,13 @@ pub const VALID_GROUPS: [&str; 14] = [
 ];
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct UrlInfoResponse {
     pub response: NestedUrlInfoResponse,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct NestedUrlInfoResponse {
     pub operation_request: OperationRequest,
     pub url_info_result: UrlInfoResult,
@@ -60,7 +60,7 @@ pub struct OperationRequest {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct SiteData {
     #[serde(deserialize_with = "string_deserializer", default)]
     pub title: Option<String>,
@@ -71,7 +71,7 @@ pub struct SiteData {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct Speed {
     #[serde(deserialize_with = "u64_deserializer", default)]
     pub median_load_time: Option<u64>,
@@ -80,7 +80,7 @@ pub struct Speed {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct OwnedDomain {
     #[serde(deserialize_with = "string_deserializer", default)]
     pub domain: Option<String>,
@@ -89,14 +89,14 @@ pub struct OwnedDomain {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct Language {
     #[serde(deserialize_with = "string_deserializer", default)]
     pub locale: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct ContentData {
     #[serde(deserialize_with = "string_deserializer", default)]
     pub data_url: Option<String>,
@@ -113,26 +113,26 @@ pub struct ContentData {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct Alexa {
     pub content_data: Option<ContentData>,
     pub traffic_data: Option<TrafficData>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct UrlInfoResult {
     pub alexa: Alexa,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct ResponseStatus {
     pub status_code: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct TrafficData {
     #[serde(deserialize_with = "string_deserializer", default)]
     pub data_url: Option<String>,
@@ -146,19 +146,19 @@ pub struct TrafficData {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct UsageStatistics {
     pub usage_statistic: Option<Vec<UsageStatistic>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct ContributingSubdomains {
     pub contributing_subdomain: Option<Vec<ContributingSubdomain>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct UsageStatistic {
     pub time_range: Option<TimeRange>,
     pub rank: Option<DeltaValue>,
@@ -167,7 +167,7 @@ pub struct UsageStatistic {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct ContributingSubdomain {
     #[serde(deserialize_with = "string_deserializer", default)]
     pub data_url: Option<String>,
@@ -177,7 +177,7 @@ pub struct ContributingSubdomain {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct TimeRange {
     #[serde(deserialize_with = "u64_deserializer", default)]
     pub days: Option<u64>,
@@ -186,7 +186,7 @@ pub struct TimeRange {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct DeltaValue {
     #[serde(deserialize_with = "f64_deserializer", default)]
     pub value: Option<f64>,
@@ -195,14 +195,14 @@ pub struct DeltaValue {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct Reach {
     pub rank: Option<DeltaValue>,
     pub per_million: Option<DeltaValue>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct PageViews {
     pub rank: Option<DeltaValue>,
     pub per_million: Option<DeltaValue>,
@@ -210,7 +210,7 @@ pub struct PageViews {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct DomainReach {
     #[serde(deserialize_with = "f64_deserializer", default)]
     pub percentage: Option<f64>,
@@ -218,7 +218,7 @@ pub struct DomainReach {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct DomainPageViews {
     #[serde(deserialize_with = "f64_deserializer", default)]
     pub percentage: Option<f64>,
@@ -227,13 +227,13 @@ pub struct DomainPageViews {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct RankByCountry {
     pub country: Option<Vec<Country>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct Country {
     #[serde(deserialize_with = "string_deserializer", default)]
     pub code: Option<String>,
@@ -243,7 +243,7 @@ pub struct Country {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct CountryContribution {
     #[serde(deserialize_with = "f64_deserializer", default)]
     pub page_views: Option<f64>,
