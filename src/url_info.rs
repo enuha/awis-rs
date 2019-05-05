@@ -161,7 +161,7 @@ pub struct ContributingSubdomains {
 #[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct UsageStatistic {
     pub time_range: Option<TimeRange>,
-    pub rank: Option<DeltaValue>,
+    pub rank: Option<IntDeltaValue>,
     pub reach: Option<Reach>,
     pub page_views: Option<PageViews>,
 }
@@ -187,7 +187,7 @@ pub struct TimeRange {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
-pub struct DeltaValue {
+pub struct FloatDeltaValue {
     #[serde(deserialize_with = "f64_deserializer", default)]
     pub value: Option<f64>,
     #[serde(deserialize_with = "f64_deserializer", default)]
@@ -196,17 +196,26 @@ pub struct DeltaValue {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
+pub struct IntDeltaValue {
+    #[serde(deserialize_with = "u64_deserializer", default)]
+    pub value: Option<u64>,
+    #[serde(deserialize_with = "f64_deserializer", default)]
+    pub delta: Option<f64>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct Reach {
-    pub rank: Option<DeltaValue>,
-    pub per_million: Option<DeltaValue>,
+    pub rank: Option<IntDeltaValue>,
+    pub per_million: Option<FloatDeltaValue>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all(deserialize = "PascalCase", serialize = "camelCase"))]
 pub struct PageViews {
-    pub rank: Option<DeltaValue>,
-    pub per_million: Option<DeltaValue>,
-    pub per_user: Option<DeltaValue>,
+    pub rank: Option<IntDeltaValue>,
+    pub per_million: Option<FloatDeltaValue>,
+    pub per_user: Option<FloatDeltaValue>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -214,7 +223,7 @@ pub struct PageViews {
 pub struct DomainReach {
     #[serde(deserialize_with = "f64_deserializer", default)]
     pub percentage: Option<f64>,
-    pub per_million: Option<DeltaValue>,
+    pub per_million: Option<FloatDeltaValue>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
